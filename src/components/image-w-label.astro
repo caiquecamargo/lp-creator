@@ -1,0 +1,36 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import ButtonSecondary from "./button-secondary.astro";
+
+type Props = {
+  class?: string;
+  src: ImageMetadata;
+  alt: string;
+  label: string;
+  href?: string;
+};
+
+const { class: _class = "", src, alt, label, href } = Astro.props as Props;
+---
+
+<section
+  class:list={[
+    "relative rounded-2xl bg-surface shadow-surface-bright/40 shadow-[0_-20px_100px]",
+    _class,
+  ]}
+>
+  <div class="h-full w-full overflow-hidden rounded-2xl">
+    {
+      src.height > src.width ? (
+        <Image src={src} alt={alt} class="w-full h-auto object-cover" />
+      ) : (
+        <Image src={src} alt={alt} class="h-full w-auto object-cover" />
+      )
+    }
+  </div>
+
+  <div class="absolute -bottom-4 flex justify-center w-full">
+    <ButtonSecondary href={href}>{label}</ButtonSecondary>
+  </div>
+</section>

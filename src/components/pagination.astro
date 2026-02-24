@@ -1,0 +1,55 @@
+---
+import { list } from "@caiquecamargo/utils/core";
+
+type Props = {
+  currentPage: number;
+  lastPage: number;
+  baseUrl: string;
+};
+
+const { currentPage, lastPage, baseUrl } = Astro.props as Props;
+
+const pages = list(
+  Math.max(currentPage - 3, 1),
+  Math.min(currentPage + 3, lastPage),
+);
+---
+
+<div
+  class="flex justify-center items-center gap-2 mt-20 font-basement font-bold text-lg"
+>
+  <a
+    class="w-6 h-8 flex justify-center items-center hover:text-primary text-black dark:text-white"
+    href={`${baseUrl}/${1}`}>{"<<"}</a
+  >
+  <a
+    class="w-6 h-8 flex justify-center items-center hover:text-primary text-black dark:text-white"
+    href={currentPage <= 1 ? "#" : `${baseUrl}/${currentPage - 1}`}>{"<"}</a
+  >
+
+  {
+    pages.map((page) => (
+      <a
+        href={`${baseUrl}/${page}`}
+        class:list={[
+          currentPage === page
+            ? "bg-primary text-white"
+            : "text-black dark:text-white hover:text-primary",
+          "w-8 h-8 flex justify-center items-center rounded-full",
+        ]}
+      >
+        {page}
+      </a>
+    ))
+  }
+
+  <a
+    class="w-6 h-8 flex justify-center items-center hover:text-primary text-black dark:text-white"
+    href={currentPage >= lastPage ? "#" : `${baseUrl}/${currentPage + 1}`}
+    >{">"}</a
+  >
+  <a
+    class="w-6 h-8 flex justify-center items-center hover:text-primary text-black dark:text-white"
+    href={`${baseUrl}/${lastPage}`}>{">>"}</a
+  >
+</div>

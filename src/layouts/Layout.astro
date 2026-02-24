@@ -1,0 +1,73 @@
+---
+import { Font } from "astro:assets";
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+type Props = {
+	title?: string;
+	description?: string;
+	image?: string;
+	class?: string;
+};
+
+const {
+	title = "",
+	description = "",
+	image = "/og-image.png",
+	class: _class = "",
+} = Astro.props;
+
+const siteUrl = Astro.site || "";
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const ogImage = new URL(image, siteUrl);
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="Triade" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="canonical" href={canonicalURL} />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- SEO -->
+		<title>
+			{title ? `${title} | ` : ""}
+		</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content="" />
+		<meta name="author" content="" />
+		<meta name="robots" content="index, follow" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title ? `${title} | ` : ""} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:locale" content="pt_BR" />
+		<meta property="og:site_name" content="" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={canonicalURL} />
+		<meta name="twitter:title" content={title ? `${title} | ` : ""} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<Font cssVariable="--font-gotham" />
+		<ClientRouter />
+		<slot name="head" />
+	</head>
+	<body class:list={["max-w-dvw overflow-x-hidden", _class]}>
+		<slot />
+	</body>
+</html>

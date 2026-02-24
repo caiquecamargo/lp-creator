@@ -1,0 +1,14 @@
+---
+import BaseIcon from "./base-icon.astro";
+
+const { class: _class } = Astro.props;
+---
+
+<BaseIcon
+  class:list={[
+    "bg-linear-to-r from-secondary to-tertiary text-surface",
+    _class,
+  ]}
+>
+  <slot />
+</BaseIcon>

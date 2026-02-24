@@ -1,0 +1,33 @@
+---
+import BaseButton from "./base-button.astro";
+
+type Props = {
+  class?: string;
+  href?: string;
+  external?: boolean;
+  type?: "button" | "submit" | "reset";
+};
+
+const {
+  class: _class = "",
+  href,
+  external = false,
+  type = "button",
+} = Astro.props as Props;
+---
+
+<BaseButton
+  class={`bg-primary text-white ${_class}`}
+  href={href}
+  external={external}
+  type={type}
+>
+  {
+    Astro.slots.has("icon") && (
+      <div slot="inner-icon">
+        <slot name="icon" />
+      </div>
+    )
+  }
+  <slot />
+</BaseButton>

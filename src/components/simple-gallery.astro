@@ -1,0 +1,154 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import ArrowLeft from "~icons/material-symbols/arrow-left";
+import ArrowRight from "~icons/material-symbols/arrow-right";
+
+interface Props {
+  images: Array<{ src: ImageMetadata; alt: string }>;
+  aspect?: string;
+  withArrows?: boolean;
+  timeout?: number;
+}
+
+const {
+  images,
+  aspect = "aspect-video",
+  withArrows = false,
+  timeout = 0,
+} = Astro.props;
+---
+
+<simple-gallery data-timeout={timeout}>
+  <div class="relative max-w-6xl mx-auto">
+    <div class:list={["relative overflow-hidden", aspect]}>
+      {
+        images.map((image, index) => (
+          <div
+            class={`absolute inset-0 transition-opacity duration-500 flex items-center rounded-4xl ${
+              index === 0 ? "opacity-100" : "opacity-0"
+            }`}
+            data-slide={index}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              class="w-full h-auto object-cover"
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Dots Navigation -->
+    <div class="flex justify-center gap-2 mt-8 z-30 relative">
+      {
+        images.map((_, index) => (
+          <button
+            class={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === 0
+                ? "bg-surface scale-110"
+                : "bg-gray-400 hover:bg-gray-600"
+            }`}
+            data-dot={index}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))
+      }
+    </div>
+
+    <!-- Arrow navigation -->
+    {
+      withArrows && (
+        <>
+          <div
+            data-arrow="prev"
+            class="absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          >
+            <ArrowLeft class="size-12 text-white hover:bg-black/20 transition-colors duration-150 rounded-full p-1" />
+          </div>
+          <div
+            data-arrow="next"
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          >
+            <ArrowRight class="size-12 text-white hover:bg-black/20 transition-colors duration-150 rounded-full p-1" />
+          </div>
+        </>
+      )
+    }
+  </div>
+</simple-gallery>
+
+<script>
+  class SimpleGallery extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const slides =
+        document.querySelectorAll<HTMLImageElement>("[data-slide]");
+      const dots = document.querySelectorAll<HTMLButtonElement>("[data-dot]");
+      const prevArrow = document.querySelector<HTMLDivElement>(
+        "[data-arrow='prev']",
+      );
+      const nextArrow = document.querySelector<HTMLDivElement>(
+        "[data-arrow='next']",
+      );
+      let currentSlide = 0;
+      const timeout = parseInt(this.dataset.timeout || "0", 0);
+
+      function showSlide(index: number) {
+        // Hide all slides
+        slides.forEach((slide) => {
+          slide.classList.remove("opacity-100");
+          slide.classList.add("opacity-0");
+        });
+
+        // Deactivate all dots
+        dots.forEach((dot) => {
+          dot.classList.remove("bg-surface", "scale-110");
+          dot.classList.add("bg-gray-400");
+        });
+
+        // Show current slide
+        slides[index].classList.remove("opacity-0");
+        slides[index].classList.add("opacity-100");
+
+        // Activate current dot
+        dots[index].classList.remove("bg-gray-400");
+        dots[index].classList.add("bg-surface", "scale-110");
+
+        currentSlide = index;
+      }
+
+      // Add click handlers to dots
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          showSlide(index);
+        });
+      });
+
+      // Add click handlers to arrows
+      prevArrow?.addEventListener("click", () => {
+        const newIndex = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(newIndex);
+      });
+
+      nextArrow?.addEventListener("click", () => {
+        const newIndex = (currentSlide + 1) % slides.length;
+        showSlide(newIndex);
+      });
+
+      // Auto slide functionality
+      if (timeout > 0) {
+        setInterval(() => {
+          const newIndex = (currentSlide + 1) % slides.length;
+          showSlide(newIndex);
+        }, timeout * 1000);
+      }
+    }
+  }
+
+  customElements.define("simple-gallery", SimpleGallery);
+</script>

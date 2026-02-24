@@ -1,0 +1,12 @@
+---
+const { class: _class } = Astro.props;
+---
+
+<div
+  class:list={[
+    "inline-flex items-center justify-center rounded-full p-1 [&>svg]:size-6",
+    _class,
+  ]}
+>
+  <slot />
+</div>

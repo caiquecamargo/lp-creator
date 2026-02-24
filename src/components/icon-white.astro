@@ -1,0 +1,9 @@
+---
+import BaseIcon from "./base-icon.astro";
+
+const { class: _class } = Astro.props;
+---
+
+<BaseIcon class:list={["bg-white text-secondary", _class]}>
+  <slot />
+</BaseIcon>

@@ -1,0 +1,23 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/header.astro";
+import Footer from "../components/footer.astro";
+import HomeBanner from "../components/home-banner.astro";
+import ConhecaATriade from "../components/conheca-a-triade.astro";
+import NossosServicos from "../components/nossos-servicos.astro";
+import Depoimentos from "../components/depoimentos.astro";
+---
+
+<Layout title="Home">
+	<div class="relative mb-20 md:mb-30">
+		<Header page="home" />
+		<HomeBanner />
+	</div>
+	<main class="space-y-4">
+		<ConhecaATriade />
+		<NossosServicos />
+		<Depoimentos />
+	</main>
+
+	<Footer />
+</Layout>

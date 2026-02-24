@@ -1,0 +1,40 @@
+---
+type Props = {
+  class?: string;
+  href?: string;
+  external?: boolean;
+  type?: "button" | "submit" | "reset";
+};
+
+const {
+  class: _class = "",
+  href,
+  external = false,
+  type = "button",
+} = Astro.props as Props;
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  class:list={[
+    "rounded-full p-1 flex items-center justify-between cursor-pointer",
+    _class,
+  ]}
+  href={href}
+  target={external ? "_blank" : null}
+  rel={external ? "noopener noreferrer" : null}
+  type={Tag === "button" ? type : undefined}
+>
+  {
+    Astro.slots.has("inner-icon") && (
+      <div class="flex-0">
+        <slot name="inner-icon" />
+      </div>
+    )
+  }
+
+  <div class="flex-1 mx-2 md:mx-4">
+    <slot />
+  </div>
+</Tag>
