@@ -6,41 +6,258 @@ type SelectOption = {
 };
 
 type Props = {
+  id?: string;
   class?: string;
   name?: string;
   required?: boolean;
   placeholder?: string;
   options?: SelectOption[];
+  value?: string;
 };
 
 const {
+  id = `select-${Math.random().toString(36).slice(2, 10)}`,
   class: _class = "",
   name = "",
   required = false,
-  placeholder = "",
+  placeholder = "Selecione uma opção",
   options = [],
+  value = "",
 } = Astro.props as Props;
+
+const selectedOption =
+  options.find((option) => option.value === value && !option.disabled) ?? null;
+
+const initialLabel = selectedOption?.label ?? placeholder;
+const initialValue = selectedOption?.value ?? "";
 ---
 
-<div>
-  <select
+<div
+  data-select-root
+  data-select-id={id}
+  class="relative"
+>
+  <input
+    data-select-hidden
+    type="hidden"
+    name={name}
+    value={initialValue}
+    required={required}
+  />
+
+  <button
+    data-select-trigger
+    id={`${id}-trigger`}
+    type="button"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls={`${id}-listbox`}
     class:list={[
-      "w-full px-6 py-3 bg-gray-200 text-gray-700 data-error:border-red-500 focus:data-error:border-red-500 focus:outline-none focus:ring-2 focus:ring-primary transition-border duration-200 rounded-full",
+      "w-full px-6 py-3 bg-gray-200 text-gray-700 data-error:border-red-500 focus:data-error:border-red-500 focus:outline-none focus:ring-2 focus:ring-primary transition-border duration-200 rounded-full flex items-center justify-between gap-3 text-left",
+      !selectedOption && "text-gray-500",
       _class,
     ]}
-    name={name}
-    required={required}
   >
-    {placeholder && (
-      <option value="" disabled selected>
-        {placeholder}
-      </option>
-    )}
+    <span data-select-label class="truncate">{initialLabel}</span>
+    <svg
+      class="h-4 w-4 shrink-0 text-gray-500 transition-transform duration-200"
+      data-select-chevron
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+        clip-rule="evenodd"
+      ></path>
+    </svg>
+  </button>
 
-    {options.map((option) => (
-      <option value={option.value} disabled={option.disabled}>
-        {option.label}
-      </option>
-    ))}
-  </select>
+  <div
+    data-select-panel
+    class="absolute z-30 mt-2 hidden w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg"
+  >
+    <ul
+      id={`${id}-listbox`}
+      data-select-listbox
+      role="listbox"
+      aria-labelledby={`${id}-trigger`}
+      tabindex="-1"
+      class="max-h-64 overflow-auto py-2"
+    >
+      {options.map((option, index) => {
+        const isSelected = option.value === initialValue;
+        return (
+          <li
+            role="option"
+            aria-selected={isSelected ? "true" : "false"}
+            aria-disabled={option.disabled ? "true" : "false"}
+            data-select-option
+            data-value={option.value}
+            data-label={option.label}
+            data-disabled={option.disabled ? "true" : "false"}
+            data-index={index}
+            class:list={[
+              "px-4 py-2 text-sm transition-colors select-none",
+              option.disabled
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer text-gray-700 hover:bg-gray-100",
+              isSelected && !option.disabled && "bg-gray-100",
+            ]}
+          >
+            {option.label}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
 </div>
+
+<script>
+  (() => {
+    const roots = Array.from(
+      document.querySelectorAll('[data-select-root]')
+    ) as HTMLElement[];
+
+    const closeAll = (except?: HTMLElement) => {
+      roots.forEach((root) => {
+        if (except && root === except) return;
+        const trigger = root.querySelector(
+          '[data-select-trigger]'
+        ) as HTMLButtonElement | null;
+        const panel = root.querySelector('[data-select-panel]') as HTMLElement | null;
+        const chevron = root.querySelector(
+          '[data-select-chevron]'
+        ) as SVGElement | null;
+
+        if (!trigger || !panel || !chevron) return;
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+      });
+    };
+
+    const getEnabledOptions = (root: HTMLElement) =>
+      Array.from(root.querySelectorAll('[data-select-option]')).filter(
+        (el) => (el as HTMLElement).dataset.disabled !== 'true'
+      ) as HTMLElement[];
+
+    roots.forEach((root) => {
+      const trigger = root.querySelector(
+        '[data-select-trigger]'
+      ) as HTMLButtonElement | null;
+      const panel = root.querySelector('[data-select-panel]') as HTMLElement | null;
+      const listbox = root.querySelector('[data-select-listbox]') as HTMLElement | null;
+      const label = root.querySelector('[data-select-label]') as HTMLElement | null;
+      const hiddenInput = root.querySelector(
+        '[data-select-hidden]'
+      ) as HTMLInputElement | null;
+      const chevron = root.querySelector(
+        '[data-select-chevron]'
+      ) as SVGElement | null;
+
+      if (!trigger || !panel || !listbox || !label || !hiddenInput || !chevron) return;
+
+      const placeholder = label.textContent ?? '';
+
+      const open = () => {
+        closeAll(root);
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+      };
+
+      const close = () => {
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+      };
+
+      const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+
+      const updateSelectedUI = (value: string, text: string) => {
+        hiddenInput.value = value;
+        label.textContent = text || placeholder;
+        label.classList.toggle('text-gray-500', !value);
+        label.classList.toggle('text-gray-700', !!value);
+
+        const options = Array.from(
+          root.querySelectorAll('[data-select-option]')
+        ) as HTMLElement[];
+        options.forEach((optionEl) => {
+          const selected = optionEl.dataset.value === value;
+          optionEl.setAttribute('aria-selected', selected ? 'true' : 'false');
+          optionEl.classList.toggle('bg-gray-100', selected);
+        });
+      };
+
+      trigger.addEventListener('click', () => {
+        if (isOpen()) close();
+        else open();
+      });
+
+      root.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        const option = target.closest('[data-select-option]') as HTMLElement | null;
+        if (!option) return;
+        if (option.dataset.disabled === 'true') return;
+
+        updateSelectedUI(option.dataset.value ?? '', option.dataset.label ?? '');
+        hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+        close();
+        trigger.focus();
+      });
+
+      trigger.addEventListener('keydown', (event) => {
+        const enabled = getEnabledOptions(root);
+        if (!enabled.length) return;
+
+        const selectedValue = hiddenInput.value;
+        const currentIndex = enabled.findIndex(
+          (el) => el.dataset.value === selectedValue
+        );
+
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          if (!isOpen()) open();
+
+          let nextIndex = currentIndex;
+          if (event.key === 'ArrowDown') {
+            nextIndex = currentIndex < enabled.length - 1 ? currentIndex + 1 : 0;
+          } else {
+            nextIndex = currentIndex > 0 ? currentIndex - 1 : enabled.length - 1;
+          }
+
+          const next = enabled[nextIndex] ?? enabled[0];
+          next.scrollIntoView({ block: 'nearest' });
+          updateSelectedUI(next.dataset.value ?? '', next.dataset.label ?? '');
+          hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+          hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          if (!isOpen()) open();
+          else close();
+        }
+
+        if (event.key === 'Escape') {
+          if (!isOpen()) return;
+          event.preventDefault();
+          close();
+        }
+      });
+
+      document.addEventListener('click', (event) => {
+        const target = event.target as Node;
+        if (!root.contains(target)) close();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') close();
+      });
+    });
+  })();
+</script>
