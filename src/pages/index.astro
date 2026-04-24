@@ -1,23 +1,152 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/header.astro";
-import Footer from "../components/footer.astro";
-import HomeBanner from "../components/home-banner.astro";
-import ConhecaATriade from "../components/conheca-a-triade.astro";
-import NossosServicos from "../components/nossos-servicos.astro";
-import Depoimentos from "../components/depoimentos.astro";
+import Layout from "@/layouts/Layout.astro";
+import background from "@/assets/images/LP-Interone.png";
+import logoRight from "@/assets/images/logo-lp.png";
+import logo from "@/assets/images/logo-lp-centro.webp";
+import markWifi from "@/assets/images/fundo-mark.png";
+import markBlink from "@/assets/images/fundo-mark-tl.png";
+import banner from "@/assets/images/banner-lp.png";
+import bannerExt from "@/assets/images/banner-lp-ext.png";
+import bannerVertical from "@/assets/images/banner-vertical.png";
+import { Image } from "astro:assets";
+import IconParkSolidCorrect from '~icons/icon-park-solid/correct'
+import Input from "@/components/input.astro";
+import Select from "@/components/select.astro";
+import ButtonPrimary from "@/components/button-primary.astro";
+
+const positions = [
+  "top-0 md:-top-[10%] -left-[5%] w-[100px] md:w-[250px]",
+  "-top-[5%] right-0 w-[100px] md:w-[160px]",
+  "top-[50%] right-0 md:-right-[5%] w-[250px] md:w-[450px]",
+  "bottom-0 left--2% w-[100px] md:w-[200px]",
+]
+
+const features = [
+  { icon: IconParkSolidCorrect, text: "Internet que não trava" },
+  { icon: IconParkSolidCorrect, text: "Intalação rápida" },
+  { icon: IconParkSolidCorrect, text: "Atendimento de verdade" },
+]
+
+const selectOptions = [
+  { value: "chapeco", label: "Chapecó | SC" },
+  { value: "gutambu", label: "Guatambu | SC" },
+  { value: "xanxere", label: "Xanxerê | SC" },
+  { value: "xaxim", label: "Xaxim | SC" },
+]
 ---
 
-<Layout title="Home">
-	<div class="relative mb-20 md:mb-30">
-		<Header page="home" />
-		<HomeBanner />
-	</div>
-	<main class="space-y-4">
-		<ConhecaATriade />
-		<NossosServicos />
-		<Depoimentos />
+<Layout title="Home" class="bg-linear-to-r from-primary to-primary-dark relative overflow-y-auto">
+
+  {
+    positions.map((_class) => (
+      <Image
+        src={markBlink}
+        alt="mark blink"
+        class:list={["h-auto absolute", _class]}
+      />
+    ))
+  }
+
+	<header class="relative flex justify-between px-8 py-8">
+	  <div class="flex-1" />
+	  <Image
+      src={logo}
+      alt="Logo"
+      class="w-auto h-10 md:h-20 flex-0"
+    />
+    <div class="flex-1 flex justify-end">
+      <Image
+        src={logoRight}
+        alt="Logo Right"
+        class="w-auto h-12 md:h-20"
+      />
+    </div>
+	</header>
+
+	<main>
+  	<article>
+      <section class="w-full max-w-380 mx-auto relative pb-16 px-1">
+        <Image
+          src={banner}
+          alt="Banner"
+          class="w-full h-auto"
+        />
+      </section>
+
+      <!-- <section class="w-full ">
+        <Image
+          src={bannerExt}
+          alt="Banner"
+          class="w-full h-auto"
+        />
+      </section> -->
+  	</article>
+
+    <article class="py-16 bg-secondary">
+      <section class="w-full max-w-7xl mx-auto relative px-2">
+        <section class="flex flex-col md:flex-row items-center justify-around">
+          {
+            features.map(({ icon: Icon, text }) => (
+              <div class="flex items-center gap-4 mb-4">
+                <Icon class="size-6" />
+                <span class="text-lg md:text-2xl text-white font-bold">{text}</span>
+              </div>
+            ))
+          }
+        </section>
+
+        <section class="grid md:grid-cols-[15%_1fr] gap-8 mt-8">
+          <div class="hidden md:block">
+            <Image
+              src={bannerVertical}
+              alt="Banner Vertical"
+              class="w-full h-auto"
+            />
+          </div>
+          <div class="space-y-4">
+            <h3 class="font-extrabold text-xl md:text-3xl uppercase text-primary-dark text-center pb-4">Aproveite a promoção especial</h3>
+
+            <Input name="nome" placeholder="Nome completo" />
+            <Input name="telefone" placeholder="Telefone para contato" />
+            <Input name="email" placeholder="E-mail" />
+            <Select name="cidade" placeholder="Selecione uma cidade" options={selectOptions} />
+          </div>
+        </section>
+
+        <ButtonPrimary class="mt-8 block mx-auto absolute -bottom-22 left-[calc(50%-117px)] z-10">Quero assinar</ButtonPrimary>
+      </section>
+    </article>
 	</main>
 
-	<Footer />
+	<footer class="relative flex flex-col gap-y-8 md:flex-row justify-around items-center py-16">
+    <div>
+  	  <div class="flex items-center gap-4">
+  			<Image
+          src={logo}
+          alt="Logo"
+          class="w-auto h-10"
+        />
+        <Image
+          src={logoRight}
+          alt="Logo Right"
+          class="w-auto h-20"
+        />
+     </div>
+		</div>
+
+		<div class="text-2xl text-white text-center">
+      <p>(49) <b>3323-6688</b></p>
+      <p>(49) <b>99904-0067</b></p>
+		</div>
+
+		<div class="text-white">
+      <p class="text-secondary mb-2 font-bold">#VemSerInterone</p>
+
+      <p>Avenida Fernando Machado</p>
+      <p>600-D, Centro, Chapecó</p>
+      <p>89802-110</p>
+		</div>
+
+	</footer>
+
 </Layout>

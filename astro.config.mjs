@@ -1,4 +1,3 @@
-// @ts-check
 import { defineConfig, envField } from 'astro/config';
 import vue from '@astrojs/vue';
 import tailwindcss from '@tailwindcss/vite';
@@ -9,11 +8,12 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  site: '',
+  site: 'https://lp-creator.caiquedecamargo.dev.br',
   integrations: [vue()],
   adapter: cloudflare({
     imageService: 'compile',
   }),
+
   env: {
     schema: {
       OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'server', access: 'secret' }),
@@ -30,7 +30,7 @@ export default defineConfig({
         autoInstall: true,
         scale: 2,
         customCollections: {
-          local: FileSystemIconLoader('./src/assets'),
+          local: FileSystemIconLoader('./src/assets/icons'),
         },
       }),
       cmsPlugin({

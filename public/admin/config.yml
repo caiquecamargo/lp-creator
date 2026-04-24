@@ -1,0 +1,172 @@
+backend:
+  name: github
+  repo: caiquecamargo/lp-creator
+  branch: main
+  auth_endpoint: oauth
+  site_domain: ""
+  base_url: https://
+locale: pt
+logo_url: /logo.svg
+site_url: https://
+display_url: https://
+media_folder: src/assets/images
+public_folder: /assets/images
+media_libraries:
+  default:
+    config:
+      max_file_size: 25000000
+      slugify_filename: true
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2048
+          height: 2048
+collections:
+  - name: sections
+    label: Seções
+    icon: home
+    folder: src/content/sections
+    fields:
+      - widget: number
+        name: order
+        label: Ordem
+        default: 0
+singletons:
+  - name: colors
+    label: Cores
+    icon: colors
+    file: src/data/colors.json
+    summary: "{{title}}"
+    thumbnail: false
+    editor:
+      preview: false
+    fields:
+      - widget: hidden
+        name: title
+        label: Título
+        default: Cores
+      - widget: object
+        name: primary
+        label: Primária
+        fields:
+          - widget: color
+            name: default
+            label: Primária (Padrão)
+            required: true
+          - widget: color
+            name: light
+            label: Primária (Light)
+            required: false
+          - widget: color
+            name: dark
+            label: Primária (Dark)
+            required: false
+      - widget: object
+        name: secondary
+        label: Secundária
+        fields:
+          - widget: color
+            name: default
+            label: Secundária (Padrão)
+            required: true
+          - widget: color
+            name: light
+            label: Secundária (Light)
+            required: false
+          - widget: color
+            name: dark
+            label: Secundária (Dark)
+            required: false
+      - widget: object
+        name: highlight
+        label: Realce
+        fields:
+          - widget: color
+            name: default
+            label: Realce (Padrão)
+            required: false
+          - widget: color
+            name: light
+            label: Realce (Light)
+            required: false
+          - widget: color
+            name: dark
+            label: Realce (Dark)
+            required: false
+  - divider: true
+  - name: header
+    label: Header
+    icon: page_header
+    file: src/data/header.json
+    summary: "{{title}}"
+    thumbnail: false
+    editor:
+      preview: false
+    fields:
+      - widget: hidden
+        name: title
+        label: Título
+        default: Header to
+      - widget: boolean
+        name: show
+        label: Exibir Header
+        default: true
+      - widget: object
+        name: logo
+        label: Configurações do Logo
+        fields:
+          - widget: image
+            name: image
+            label: Imagem do Logo
+          - widget: select
+            name: position
+            label: Posição do Logo
+            options:
+              - label: Esquerda
+                value: left
+              - label: Centro
+                value: center
+              - label: Direita
+                value: right
+            default: center
+      - widget: list
+        name: left-menu
+        label: Menu Esquerdo
+        comment: Menu mais a esquerda, fica centralizado se o logo estiver alinhado à
+          esquerda
+        default: []
+        required: false
+        fields: &a1
+          - widget: string
+            name: label
+            label: Label
+          - widget: image
+            name: icon
+            label: Ícone ou imagem (opcional)
+            required: false
+          - widget: boolean
+            name: icon-only
+            label: Exibir apenas o ícone (sem label)
+            default: false
+          - widget: string
+            name: id
+            label: ID do componente
+            required: false
+            hint: "Exemplo: #contato. Se preenchido, o link irá rolar a página até o
+              componente com esse ID"
+          - widget: string
+            name: url
+            label: URL
+            comment: Apenas para link externo. Se o campo ID for preenchido, esse campo será
+              ignorado
+            hint: "Exemplo: https://exemplo.com"
+            required: false
+      - widget: list
+        name: right-menu
+        label: Menu Direito
+        comment: Menu mais a direita, fica centralizado se o logo estiver alinhado à
+          direita
+        default: []
+        required: false
+        fields: *a1

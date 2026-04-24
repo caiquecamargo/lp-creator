@@ -1,0 +1,18 @@
+{
+  "title": "Cores",
+  "primary": {
+    "default": "#013e87",
+    "light": "#069edd",
+    "dark": "#054266"
+  },
+  "secondary": {
+    "default": "#07bedb",
+    "light": "#03e2f1",
+    "dark": "#1ca7c8"
+  },
+  "highlight": {
+    "default": "#000000",
+    "light": "#000000",
+    "dark": "#000000"
+  }
+}

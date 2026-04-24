@@ -1,0 +1,18 @@
+{
+  "title": "Header to",
+  "show": true,
+  "logo": {
+    "image": "/assets/images/logo-lp-centro.webp",
+    "position": "right"
+  },
+  "left-menu": [],
+  "right-menu": [
+    {
+      "label": "Logo 22 anos",
+      "icon": "/assets/images/logo-lp.webp",
+      "icon-only": true,
+      "id": "",
+      "url": ""
+    }
+  ]
+}
