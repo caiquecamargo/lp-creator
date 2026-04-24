@@ -10,9 +10,10 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: 'https://lpcreator.caiquedecamargo.dev.br',
   integrations: [vue()],
-  adapter: cloudflare({
-    imageService: 'compile',
-  }),
+
+  // adapter: cloudflare({
+  //   imageService: 'compile',
+  // }),
 
   env: {
     schema: {
@@ -38,7 +39,7 @@ export default defineConfig({
         iconUrl: '/logo.svg',
         createIndexHTML: true,
         type: 'sveltia',
-        oauth: true,
+        oauth: false,
       }),
     ]
   },
