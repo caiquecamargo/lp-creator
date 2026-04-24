@@ -8,7 +8,7 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://lp-creator.caiquedecamargo.dev.br',
+  site: 'https://lpcreator.caiquedecamargo.dev.br',
   integrations: [vue()],
   adapter: cloudflare({
     imageService: 'compile',
