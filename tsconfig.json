@@ -3,16 +3,21 @@
   "include": [
     ".astro/types.d.ts",
     "**/*",
+    "./worker-configuration.d.ts"
   ],
   "exclude": [
     "dist"
   ],
   "compilerOptions": {
     "jsx": "preserve",
-    "types": ["unplugin-icons/types/vue"],
+    "types": [
+      "unplugin-icons/types/vue"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   }
 }

@@ -2,6 +2,7 @@
 import { Font } from "astro:assets";
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import WaFloat from "@/components/wa-float.astro";
 
 type Props = {
 	title?: string;
@@ -69,5 +70,7 @@ const ogImage = new URL(image, siteUrl);
 	</head>
 	<body class:list={["max-w-dvw overflow-x-hidden", _class]}>
 		<slot />
+
+		<WaFloat />
 	</body>
 </html>
