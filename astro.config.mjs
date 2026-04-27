@@ -12,11 +12,9 @@ export default defineConfig({
   site: 'https://lpcreator.caiquedecamargo.dev.br',
   integrations: [vue()],
 
-  adapter: cloudflare(),
-
-  image: {
-    service: passthroughImageService(),
-  },
+  adapter: cloudflare({
+    imageService: 'compile',
+  }),
 
   env: {
     schema: {
