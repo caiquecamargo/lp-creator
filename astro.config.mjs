@@ -1,4 +1,4 @@
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, passthroughImageService } from 'astro/config';
 import vue from '@astrojs/vue';
 import tailwindcss from '@tailwindcss/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
@@ -13,6 +13,10 @@ export default defineConfig({
   integrations: [vue()],
 
   adapter: cloudflare(),
+
+  image: {
+    service: passthroughImageService(),
+  },
 
   env: {
     schema: {
