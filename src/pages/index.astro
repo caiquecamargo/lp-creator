@@ -106,14 +106,23 @@ const selectOptions = [
           <div class="space-y-4">
             <h3 class="font-extrabold text-xl md:text-3xl uppercase text-primary-dark text-center pb-4">Aproveite a promoção especial</h3>
 
-            <Input name="nome" placeholder="Nome completo" />
-            <Input name="telefone" placeholder="Telefone para contato" />
-            <Input name="email" placeholder="E-mail" />
-            <Select name="cidade" placeholder="Selecione uma cidade" options={selectOptions} />
+            <contact-form>
+              <form id="contact-form" class="space-y-6">
+                <input type="hidden" name="input-bot" value="" />
+                <Input name="nome" placeholder="Nome completo" required />
+                <Input name="telefone" placeholder="Telefone para contato" required />
+                <Input name="email" placeholder="E-mail" required />
+                <Select name="cidade" placeholder="Selecione uma cidade" options={selectOptions} />
+                <div id="form-status" class="hidden text-sm font-medium"></div>
+
+                <div class="pt-2">
+                  <ButtonPrimary type="submit" class="mt-8 block mx-auto absolute -bottom-22 left-[calc(50%-117px)] z-10">Quero assinar</ButtonPrimary>
+                </div>
+              </form>
+            </contact-form>
           </div>
         </section>
 
-        <ButtonPrimary class="mt-8 block mx-auto absolute -bottom-22 left-[calc(50%-117px)] z-10">Quero assinar</ButtonPrimary>
       </section>
     </article>
 	</main>
@@ -150,3 +159,76 @@ const selectOptions = [
 	</footer>
 
 </Layout>
+
+<script>
+  import { actions } from "astro:actions";
+  import { navigate } from "astro:transitions/client";
+import type { ActionInputError } from "node_modules/astro/dist/actions/runtime/client";
+
+  class ContactForm extends HTMLElement {
+    connectedCallback() {
+      const form = this.querySelector<HTMLFormElement>("#contact-form");
+      const statusEl = this.querySelector<HTMLDivElement>("#form-status");
+
+      if (!form || !statusEl) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        console.log("Submitting form...");
+
+        const submitBtn = form.querySelector<HTMLButtonElement>(
+          'button[type="submit"]',
+        );
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Enviando...";
+        }
+
+        statusEl.className = "hidden";
+
+        const formData = new FormData(form);
+
+        try {
+          if (formData.get("input-bot")) {
+            throw new Error("Bot detected");
+          }
+
+          const input = {
+            form: "contato",
+            params: {
+              nome: formData.get("nome") as string,
+              telefone: formData.get("telefone") as string,
+              email: formData.get("email") as string,
+              cidade: formData.get("cidade") as string,
+            },
+          };
+
+          const { error } = await actions.enviarContato(input);
+
+          if (error) {
+            statusEl.textContent =
+                  "Erro ao enviar mensagem. Verifique se todos os campos estão preenchidos e corretamente.";
+            statusEl.className = "text-sm font-medium text-red-500";
+            return;
+          }
+
+          setTimeout(() => {
+            navigate("/sucesso");
+          }, 500);
+        } catch {
+          statusEl.textContent =
+            "Erro ao enviar mensagem. Tente novamente mais tarde.";
+          statusEl.className = "text-sm font-medium text-red-500";
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Entrar em contato";
+          }
+        }
+      });
+    }
+  }
+
+  customElements.define("contact-form", ContactForm);
+</script>

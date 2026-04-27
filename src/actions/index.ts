@@ -24,14 +24,18 @@ export const server = {
       form: z.string(),
       params: z.object({
         nome: z.string().min(1, "O nome é obrigatório"),
-        contato: z.string(),
-        mensagem: z.string().min(1, "A mensagem é obrigatória"),
+        telefone: z.string(),
+        email: z.string().min(1, "O email é obrigatório"),
+        cidade: z.string().min(1, "A cidade é obrigatória"),
       })
     }),
     handler: async (input) => {
       try {
-        await sendEmail(input.form, input.params);
+        // await sendEmail(input.form, input.params);
 
+        await new Promise((resolve) => setTimeout(resolve, 3000)); // Simula um atraso para teste
+
+        console.log("Contato enviado:", input.params);
         return { success: true, message: "Contato enviado com sucesso!" };
       } catch (error) {
         console.error("Erro ao enviar contato:", error);
