@@ -96,17 +96,17 @@ async function main() {
   for (const image of images) {
     const { used, files } = await isImageUsed(image.name, contentFiles);
 
-    if (!used) {
-      // Imagem não utilizada - deletar
-      console.log(chalk.yellow(`🗑️  Deletando imagem não utilizada: ${image.name}`));
-      const deleted = await deleteImage(image.path);
-      if (deleted) {
-        stats.deleted++;
-      } else {
-        stats.errors++;
-      }
-      continue;
-    }
+    // if (!used) {
+    //   // Imagem não utilizada - deletar
+    //   console.log(chalk.yellow(`🗑️  Deletando imagem não utilizada: ${image.name}`));
+    //   const deleted = await deleteImage(image.path);
+    //   if (deleted) {
+    //     stats.deleted++;
+    //   } else {
+    //     stats.errors++;
+    //   }
+    //   continue;
+    // }
 
     // Imagem utilizada
     if (image.ext === ".webp") {
