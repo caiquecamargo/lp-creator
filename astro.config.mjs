@@ -16,6 +16,8 @@ export default defineConfig({
     imageService: 'compile',
   }),
 
+  output: 'server',
+
   env: {
     schema: {
       OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'server', access: 'public' }),
