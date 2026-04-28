@@ -31,11 +31,8 @@ export const server = {
     }),
     handler: async (input) => {
       try {
-        // await sendEmail(input.form, input.params);
+        await sendEmail(input.form, input.params);
 
-        await new Promise((resolve) => setTimeout(resolve, 3000)); // Simula um atraso para teste
-
-        console.log("Contato enviado:", input.params);
         return { success: true, message: "Contato enviado com sucesso!" };
       } catch (error) {
         console.error("Erro ao enviar contato:", error);

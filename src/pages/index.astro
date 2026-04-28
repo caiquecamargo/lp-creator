@@ -165,7 +165,6 @@ const selectOptions = [
 <script>
   import { actions } from "astro:actions";
   import { navigate } from "astro:transitions/client";
-import type { ActionInputError } from "node_modules/astro/dist/actions/runtime/client";
 
   class ContactForm extends HTMLElement {
     connectedCallback() {
@@ -176,8 +175,6 @@ import type { ActionInputError } from "node_modules/astro/dist/actions/runtime/c
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        console.log("Submitting form...");
 
         const submitBtn = form.querySelector<HTMLButtonElement>(
           'button[type="submit"]',

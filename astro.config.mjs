@@ -18,10 +18,10 @@ export default defineConfig({
 
   env: {
     schema: {
-      OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'server', access: 'secret' }),
-      OAUTH_GITHUB_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret' }),
-      FORM_APIKEY: envField.string({ context: 'server', access: 'secret' }),
-      FORM_URL: envField.string({ context: 'server', access: 'secret' }),
+      OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'server', access: 'public' }),
+      OAUTH_GITHUB_CLIENT_SECRET: envField.string({ context: 'server', access: 'public' }),
+      FORM_APIKEY: envField.string({ context: 'server', access: 'public' }),
+      FORM_URL: envField.string({ context: 'server', access: 'public' }),
     }
   },
 
