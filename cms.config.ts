@@ -170,14 +170,14 @@ export default defineConfig({
     branch: "main",
     auth_endpoint: "oauth",
     site_domain: "",
-    base_url: "https://",
+    base_url: "https://lp.interone.com.br",
   },
 
   locale: "pt",
   logo_url: "/logo.svg",
 
-  site_url: 'https://',
-  display_url: 'https://',
+  site_url: 'https://lp.interone.com.br',
+  display_url: 'https://lp.interone.com.br',
 
   media_folder: 'src/assets/images',
   public_folder: '/assets/images',

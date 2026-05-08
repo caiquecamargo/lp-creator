@@ -1,4 +1,4 @@
-import { OAUTH_GITHUB_CLIENT_ID, OAUTH_GITHUB_CLIENT_SECRET } from 'astro:env/server';
+import { OAUTH_GITHUB_CLIENT_ID, OAUTH_GITHUB_CLIENT_SECRET } from 'astro:env/client';
 
 export const clientId = OAUTH_GITHUB_CLIENT_ID;
 export const clientSecret = OAUTH_GITHUB_CLIENT_SECRET;

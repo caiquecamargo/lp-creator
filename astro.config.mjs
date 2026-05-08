@@ -1,29 +1,23 @@
-import { defineConfig, envField, passthroughImageService } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import vue from '@astrojs/vue';
 import tailwindcss from '@tailwindcss/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import Icons from 'unplugin-icons/vite';
 import { cmsPlugin } from '@caiquecamargo/vite-plugin-netlify-cms'
 
-import cloudflare from '@astrojs/cloudflare';
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lpcreator.caiquedecamargo.dev.br',
   integrations: [vue()],
 
-  adapter: cloudflare({
-    imageService: 'compile',
-  }),
-
-  output: 'server',
+  output: 'static',
 
   env: {
     schema: {
-      OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'server', access: 'public' }),
-      OAUTH_GITHUB_CLIENT_SECRET: envField.string({ context: 'server', access: 'public' }),
-      FORM_APIKEY: envField.string({ context: 'server', access: 'public' }),
-      FORM_URL: envField.string({ context: 'server', access: 'public' }),
+      OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'client', access: 'public' }),
+      OAUTH_GITHUB_CLIENT_SECRET: envField.string({ context: 'client', access: 'public' }),
+      FORM_APIKEY: envField.string({ context: 'client', access: 'public' }),
+      FORM_URL: envField.string({ context: 'client', access: 'public' }),
     }
   },
 
@@ -43,7 +37,7 @@ export default defineConfig({
         iconUrl: '/logo.svg',
         createIndexHTML: true,
         type: 'sveltia',
-        oauth: true,
+        oauth: false,
       }),
     ]
   },

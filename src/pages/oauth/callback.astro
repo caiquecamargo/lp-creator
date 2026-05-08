@@ -1,0 +1,71 @@
+---
+import { clientId, clientSecret, tokenUrl } from './_config';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OAuth Callback</title>
+</head>
+<body>
+  <p>Authenticating...</p>
+  <script define:vars={{ clientId, clientSecret, tokenUrl }}>
+    (async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+
+      if (!code) {
+        document.body.innerHTML = '<h1>Error</h1><p>No code provided</p>';
+        return;
+      }
+
+      const data = {
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+      };
+
+      try {
+        const response = await fetch(tokenUrl, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const body = await response.json();
+
+        const content = {
+          token: body.access_token,
+          provider: 'github',
+        };
+
+        const receiveMessage = (message) => {
+          window.opener.postMessage(
+            'authorization:' + content.provider + ':success:' + JSON.stringify(content),
+            message.origin
+          );
+
+          window.removeEventListener("message", receiveMessage, false);
+        };
+
+        window.addEventListener("message", receiveMessage, false);
+
+        window.opener.postMessage("authorizing:" + content.provider, "*");
+      }
+      catch (err) {
+        console.error('OAuth callback error:', err);
+        window.location.href = '/?error=oauth_failed';
+      }
+    })();
+  </script>
+</body>
+</html>

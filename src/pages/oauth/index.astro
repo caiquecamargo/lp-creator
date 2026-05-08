@@ -1,0 +1,18 @@
+---
+import { authUrl } from './_config';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to OAuth...</title>
+  <meta http-equiv="refresh" content={`0;url=${authUrl}`} />
+</head>
+<body>
+  <p>Redirecting to GitHub for authentication... <a href={authUrl}>Click here</a> if you are not redirected automatically.</p>
+  <script define:vars={{ authUrl }}>
+    window.location.href = authUrl;
+  </script>
+</body>
+</html>

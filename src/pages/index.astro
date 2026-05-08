@@ -163,8 +163,8 @@ const selectOptions = [
 </Layout>
 
 <script>
-  import { actions } from "astro:actions";
   import { navigate } from "astro:transitions/client";
+  import { FORM_APIKEY, FORM_URL } from 'astro:env/client';
 
   class ContactForm extends HTMLElement {
     connectedCallback() {
@@ -203,9 +203,16 @@ const selectOptions = [
             },
           };
 
-          const { error } = await actions.enviarContato(input);
+          const response = await fetch(FORM_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': FORM_APIKEY,
+            },
+            body: JSON.stringify(input),
+          });
 
-          if (error) {
+          if (!response.ok) {
             statusEl.textContent =
                   "Erro ao enviar mensagem. Verifique se todos os campos estão preenchidos e corretamente.";
             statusEl.className = "text-sm font-medium text-red-500";
@@ -213,7 +220,8 @@ const selectOptions = [
           }
 
           setTimeout(() => {
-            navigate("/sucesso");
+            statusEl.textContent = "Mensagem enviada com sucesso!";
+            statusEl.className = "text-sm font-medium text-green-500";
           }, 500);
         } catch {
           statusEl.textContent =
