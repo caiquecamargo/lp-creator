@@ -16,6 +16,7 @@ export default defineConfig({
     schema: {
       OAUTH_GITHUB_CLIENT_ID: envField.string({ context: 'client', access: 'public' }),
       OAUTH_GITHUB_CLIENT_SECRET: envField.string({ context: 'client', access: 'public' }),
+      OAUTH_GITHUB_URL: envField.string({ context: 'client', access: 'public' }),
       FORM_APIKEY: envField.string({ context: 'client', access: 'public' }),
       FORM_URL: envField.string({ context: 'client', access: 'public' }),
     }

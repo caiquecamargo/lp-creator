@@ -1,5 +1,5 @@
 ---
-import { clientId, clientSecret, tokenUrl } from './_config';
+import { clientId, githubUrl, githubApiKey } from './_config';
 ---
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ import { clientId, clientSecret, tokenUrl } from './_config';
 </head>
 <body>
   <p>Authenticating...</p>
-  <script define:vars={{ clientId, clientSecret, tokenUrl }}>
+  <script define:vars={{ clientId, githubUrl, githubApiKey }}>
 
     (async function() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -20,8 +20,8 @@ import { clientId, clientSecret, tokenUrl } from './_config';
       console.log({
         code,
         clientId,
-        clientSecret,
-        tokenUrl,
+        githubUrl,
+        githubApiKey,
       })
 
       if (!code) {
@@ -31,16 +31,15 @@ import { clientId, clientSecret, tokenUrl } from './_config';
 
       const data = {
         code,
-        client_id: clientId,
-        client_secret: clientSecret,
       };
 
       try {
-        const response = await fetch(tokenUrl, {
+        const response = await fetch(githubUrl, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'x-api-key': githubApiKey,
           },
           body: JSON.stringify(data),
         });
@@ -50,29 +49,18 @@ import { clientId, clientSecret, tokenUrl } from './_config';
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const body = await response.json();
+        // The response responds with an HTML with the script to communicate with github
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const script = doc.querySelector('script');
 
-        console.log({ body })
-
-        const content = {
-          token: body.access_token,
-          provider: 'github',
-        };
-
-        const receiveMessage = (message) => {
-          window.opener.postMessage(
-            'authorization:' + content.provider + ':success:' + JSON.stringify(content),
-            message.origin
-          );
-
-          console.log('Received message from opener:', message);
-
-          window.removeEventListener("message", receiveMessage, false);
-        };
-
-        window.addEventListener("message", receiveMessage, false);
-
-        window.opener.postMessage("authorizing:" + content.provider, "*");
+        if (script) {
+          eval(script.textContent);
+        } else {
+          console.error('No script found in the response');
+          throw new Error('No script found in the response');
+        }
       }
       catch (err) {
         console.error('OAuth callback error:', err);
