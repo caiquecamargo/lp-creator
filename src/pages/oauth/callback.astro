@@ -12,7 +12,6 @@ import { clientId, clientSecret, tokenUrl } from './_config';
 <body>
   <p>Authenticating...</p>
   <script define:vars={{ clientId, clientSecret, tokenUrl }}>
-import type { $brand } from "astro:schema";
 
     (async function() {
       const urlParams = new URLSearchParams(window.location.search);
