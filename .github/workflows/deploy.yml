@@ -35,6 +35,7 @@ jobs:
           OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
           FORM_APIKEY: ${{ secrets.FORM_APIKEY }}
           FORM_URL: ${{ secrets.FORM_URL }}
+          OAUTH_GITHUB_URL: ${{ secrets.OAUTH_GITHUB_URL }}
 
       - name: 🚀 Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
