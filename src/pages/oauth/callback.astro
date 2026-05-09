@@ -64,7 +64,7 @@ import { clientId, githubUrl, githubApiKey } from './_config';
       }
       catch (err) {
         console.error('OAuth callback error:', err);
-        // window.location.href = '/?error=oauth_failed';
+        window.location.href = '/?error=oauth_failed';
       }
     })();
   </script>
