@@ -10,7 +10,8 @@ import {
   defineHiddenWidget,
   defineBooleanWidget,
   defineColorWidget,
-  defineSelectWidget
+  defineSelectWidget,
+  defineTextWidget
 } from "@caiquecamargo/vite-plugin-netlify-cms";
 
 function createColorObject(name: string, label: string, required = true) {
@@ -161,7 +162,206 @@ const sectionsConfig = defineFolderCollection({
       default: 0
     })
   ]
-})
+});
+
+const pageConfig = defineFileCollectionEntry({
+  name: "page",
+  label: "Configurações da Página",
+  icon: "page_info",
+  file: "src/data/page.json",
+  summary: "{{title}}",
+  thumbnail: false,
+  editor: {
+    preview: false
+  },
+  fields: [
+    defineHiddenWidget({
+      name: "slug",
+      label: "slug",
+      default: "page-config"
+    }),
+    defineHiddenWidget({
+      name: "title",
+      label: "Título",
+      default: "Configurações da Página"
+    }),
+    defineObjectWidget({
+      name: "header",
+      label: "Header e topo",
+      fields: [
+        defineImageWidget({
+          name: "logo",
+          label: 'Logo da Página',
+          required: true,
+        }),
+        defineImageWidget({
+          name: "marker",
+          label: 'Marcação',
+          required: true,
+        }),
+        defineImageWidget({
+          name: "banner",
+          label: 'Banner (1440x780)',
+          required: true,
+        }),
+      ]
+    }),
+    defineListWidget({
+      name: "chars",
+      label: "Características",
+      default: [],
+      required: false,
+      fields: [
+        defineStringWidget({
+          name: "label",
+          label: "Label da Característica"
+        })
+      ]
+    }),
+    defineObjectWidget({
+      name: "form",
+      label: "Configurações do Formulário",
+      fields: [
+        defineImageWidget({
+          name: "bannerForm",
+          label: 'Banner do Formulário (190x550)',
+          required: true,
+        }),
+        defineStringWidget({
+          name: "formTitle",
+          label: "Título do Formulário",
+          required: true,
+        }),
+        defineListWidget({
+          name: "formFields",
+          label: "Campos do Formulário",
+          default: [],
+          required: false,
+          types: [
+            defineObjectWidget({
+              name: "text",
+              label: "Campo de Texto",
+              fields: [
+                defineStringWidget({
+                  name: "name",
+                  label: "Nome do campo"
+                }),
+                defineStringWidget({
+                  name: "label",
+                  label: "Label do Campo"
+                }),
+                defineBooleanWidget({
+                  name: "required",
+                  label: "Campo Obrigatório",
+                  default: false,
+                })
+              ]
+            }),
+            defineObjectWidget({
+              name: "select",
+              label: "Campo de Seleção",
+              fields: [
+                defineStringWidget({
+                  name: "name",
+                  label: "Nome do campo"
+                }),
+                defineStringWidget({
+                  name: "label",
+                  label: "Label do Campo"
+                }),
+                defineListWidget({
+                  name: "options",
+                  label: "Opções de Seleção",
+                  default: [],
+                  required: false,
+                  fields: [
+                    defineStringWidget({
+                      name: "label",
+                      label: "Label da Opção"
+                    }),
+                    defineStringWidget({
+                      name: "value",
+                      label: "Valor da Opção"
+                    })
+                  ]
+                }),
+                defineBooleanWidget({
+                  name: "required",
+                  label: "Campo Obrigatório",
+                  default: false,
+                })
+              ]
+            }),
+            defineObjectWidget({
+              name: "textarea",
+              label: "Campo de Texto Longo",
+              fields: [
+                defineStringWidget({
+                  name: "name",
+                  label: "Nome do campo"
+                }),
+                defineStringWidget({
+                  name: "label",
+                  label: "Label do Campo"
+                }),
+                defineBooleanWidget({
+                  name: "required",
+                  label: "Campo Obrigatório",
+                  default: false,
+                })
+              ]
+            })
+          ]
+        }),
+        defineTextWidget({
+          name: "formSuccessMessage",
+          label: "Mensagem de Sucesso do Formulário",
+          required: true,
+        }),
+        defineTextWidget({
+          name: "button",
+          label: "Label do Botão",
+          required: true,
+        }),
+      ]
+    }),
+    defineObjectWidget({
+      name: "footer",
+      label: "Configurações do Footer",
+      fields: [
+        defineImageWidget({
+          name: "logo",
+          label: 'Logo do Footer',
+          required: true,
+        }),
+        defineListWidget({
+          name: "phones",
+          label: "Telefones",
+          default: [],
+          required: false,
+          fields: [
+            defineStringWidget({
+              name: "label",
+              label: "Label do Telefone"
+            }),
+          ]
+        }),
+        defineListWidget({
+          name: "addresses",
+          label: "Endereços",
+          default: [],
+          required: false,
+          fields: [
+            defineStringWidget({
+              name: "label",
+              label: "Label do Endereço"
+            }),
+          ]
+        }),
+      ]
+    })
+  ]
+});
 
 export default defineConfig({
   backend: {
@@ -200,12 +400,13 @@ export default defineConfig({
   },
 
   collections: [
-    sectionsConfig
+    // sectionsConfig
   ],
 
   singletons: [
-    colorsConfig,
-    { divider: true },
-    headerConfig
+    pageConfig,
+    // colorsConfig,
+    // { divider: true },
+    // headerConfig
   ],
 })

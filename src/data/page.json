@@ -1,0 +1,92 @@
+{
+  "title": "Configurações da Página",
+  "slug": "page-config",
+  "header": {
+    "logo": "/assets/images/logo-lp-centro.webp",
+    "marker": "/assets/images/logo-lp.webp",
+    "banner": "/assets/images/banner-lp.webp"
+  },
+  "chars": [
+    {
+      "label": "Internet que não trava"
+    },
+    {
+      "label": "Instalação rápida"
+    },
+    {
+      "label": "Atendimento de verdade"
+    }
+  ],
+  "form": {
+    "bannerForm": "/assets/images/banner-vertical.webp",
+    "formTitle": "Aproveite a promoção especial",
+    "formFields": [
+      {
+        "type": "text",
+        "name": "nome",
+        "label": "Nome completo",
+        "required": true
+      },
+      {
+        "type": "text",
+        "name": "telefone",
+        "label": "Telefone para contato",
+        "required": true
+      },
+      {
+        "type": "text",
+        "name": "email",
+        "label": "E-mail",
+        "required": true
+      },
+      {
+        "type": "select",
+        "name": "cidade",
+        "label": "Selecione uma cidade",
+        "required": false,
+        "options": [
+          {
+            "label": "Chapecó | SC",
+            "value": "chapeco"
+          },
+          {
+            "label": "Guatambu | SC",
+            "value": "gutambu"
+          },
+          {
+            "label": "Xanxerê | SC",
+            "value": "xanxere"
+          },
+          {
+            "label": "Xaxim | SC",
+            "value": "xaxim"
+          }
+        ]
+      }
+    ],
+    "formSuccessMessage": "Formulário enviado com sucesso!",
+    "button": "Quero assinar"
+  },
+  "footer": {
+    "logo": "/assets/images/logo-interone.webp",
+    "phones": [
+      {
+        "label": "(49) 3323-6688"
+      },
+      {
+        "label": "(49) 99904-00678"
+      }
+    ],
+    "addresses": [
+      {
+        "label": "Avenida Fernando Machado"
+      },
+      {
+        "label": "600-D, Centro, Chapecó"
+      },
+      {
+        "label": "89802-110"
+      }
+    ]
+  }
+}

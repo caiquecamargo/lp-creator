@@ -75,7 +75,57 @@ const colors = defineCollection({
   })
 });
 
+const page = defineCollection({
+  loader: file("src/data/page.json", { parser: jsonParser() }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    slug: z.string(),
+    header: z.object({
+      logo: image().transform(transformImagePath(1)),
+      marker: image().transform(transformImagePath(1)),
+      banner: image().transform(transformImagePath(1)),
+    }),
+    chars: z.array(z.object({
+      label: z.string()
+    })).default([]),
+    form: z.object({
+      bannerForm: image().transform(transformImagePath(1)),
+      formTitle: z.string(),
+      formFields: z.array(z.discriminatedUnion('type', [
+        z.object({
+          type: z.literal('text'),
+          name: z.string(),
+          label: z.string(),
+          required: z.boolean().default(false)
+        }),
+        z.object({
+          type: z.literal('select'),
+          name: z.string(),
+          label: z.string(),
+          options: z.array(z.object({
+            label: z.string(),
+            value: z.string()
+          })).default([]),
+          required: z.boolean().default(false)
+        }),
+        z.object({
+          type: z.literal('textarea'),
+          name: z.string(),
+          label: z.string(),
+          required: z.boolean().default(false)
+        })
+      ])).default([]),
+      formSuccessMessage: z.string(),
+      button: z.string()
+    }),
+    footer: z.object({
+      logo: image().transform(transformImagePath(1)),
+      phones: z.array(z.object({ label: z.string() })).default([]),
+      addresses: z.array(z.object({ label: z.string() })).default([]),
+    })
+  })
+});
+
 export const collections = {
-  header,
-  colors
+  page
 };

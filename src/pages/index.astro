@@ -1,18 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import background from "@/assets/images/LP-Interone.webp";
-import logoRight from "@/assets/images/logo-lp.webp";
-import logo from "@/assets/images/logo-lp-centro.webp";
-import markWifi from "@/assets/images/fundo-mark.webp";
 import markBlink from "@/assets/images/fundo-mark-tl.webp";
-import banner from "@/assets/images/banner-lp.webp";
-import bannerExt from "@/assets/images/banner-lp-ext.webp";
-import bannerVertical from "@/assets/images/banner-vertical.webp";
 import { Image } from "astro:assets";
 import IconParkSolidCorrect from '~icons/icon-park-solid/correct'
 import Input from "@/components/input.astro";
 import Select from "@/components/select.astro";
 import ButtonPrimary from "@/components/button-primary.astro";
+import { throwIfNotExists } from "@/utils/collection";
+import { getEntry } from "astro:content";
 
 export const prerender = true;
 
@@ -23,18 +18,7 @@ const positions = [
   "bottom-0 left--2% w-[100px] md:w-[200px]",
 ]
 
-const features = [
-  { icon: IconParkSolidCorrect, text: "Internet que não trava" },
-  { icon: IconParkSolidCorrect, text: "Intalação rápida" },
-  { icon: IconParkSolidCorrect, text: "Atendimento de verdade" },
-]
-
-const selectOptions = [
-  { value: "chapeco", label: "Chapecó | SC" },
-  { value: "gutambu", label: "Guatambu | SC" },
-  { value: "xanxere", label: "Xanxerê | SC" },
-  { value: "xaxim", label: "Xaxim | SC" },
-]
+const config = throwIfNotExists(await getEntry("page", "page-config"));
 ---
 
 <Layout class="bg-linear-to-r from-primary to-primary-dark relative overflow-y-auto">
@@ -52,13 +36,13 @@ const selectOptions = [
 	<header class="relative flex justify-between px-8 py-8">
 	  <div class="flex-1" />
 	  <Image
-      src={logo}
+      src={config.data.header.logo}
       alt="Logo"
       class="w-auto h-10 md:h-20 flex-0"
     />
     <div class="flex-1 flex justify-end">
       <Image
-        src={logoRight}
+        src={config.data.header.marker}
         alt="Logo Right"
         class="w-auto h-12 md:h-20"
       />
@@ -69,29 +53,21 @@ const selectOptions = [
   	<article>
       <section class="w-full max-w-380 mx-auto relative pb-16 px-1">
         <Image
-          src={banner}
+          src={config.data.header.banner}
           alt="Banner"
           class="w-full h-auto"
         />
       </section>
-
-      <!-- <section class="w-full ">
-        <Image
-          src={bannerExt}
-          alt="Banner"
-          class="w-full h-auto"
-        />
-      </section> -->
   	</article>
 
     <article class="py-16 bg-secondary">
       <section class="w-full max-w-7xl mx-auto relative px-2">
         <section class="flex flex-col md:flex-row items-center justify-around">
           {
-            features.map(({ icon: Icon, text }) => (
+            config.data.chars.map((text) => (
               <div class="flex items-center gap-4 mb-4">
-                <Icon class="size-6" />
-                <span class="text-lg md:text-2xl text-white font-bold">{text}</span>
+                <IconParkSolidCorrect class="size-6" />
+                <span class="text-lg md:text-2xl text-white font-bold">{text.label}</span>
               </div>
             ))
           }
@@ -100,25 +76,33 @@ const selectOptions = [
         <section class="grid md:grid-cols-[15%_1fr] gap-8 mt-8">
           <div class="hidden md:block">
             <Image
-              src={bannerVertical}
+              src={config.data.form.bannerForm}
               alt="Banner Vertical"
               class="w-full h-auto"
             />
           </div>
           <div class="space-y-4">
-            <h3 class="font-extrabold text-xl md:text-3xl uppercase text-primary-dark text-center pb-4">Aproveite a promoção especial</h3>
+            <h3 class="font-extrabold text-xl md:text-3xl uppercase text-primary-dark text-center pb-4">{config.data.form.formTitle}</h3>
 
-            <contact-form>
+            <contact-form data-config={JSON.stringify(config.data.form)}>
               <form id="contact-form" class="space-y-6">
                 <input type="hidden" name="input-bot" value="" />
-                <Input name="nome" placeholder="Nome completo" required />
-                <Input name="telefone" placeholder="Telefone para contato" required />
-                <Input name="email" placeholder="E-mail" required />
-                <Select name="cidade" placeholder="Selecione uma cidade" options={selectOptions} />
+                {
+                  config.data.form.formFields.map(field => (
+                    <>
+                      {field.type === "text" && (
+                        <Input name={field.name} placeholder={field.label} required={field.required} />
+                      )}
+                      {field.type === "select" && (
+                        <Select name={field.name} placeholder={field.label} options={field.options} />
+                      )}
+                    </>
+                  ))
+                }
                 <div id="form-status" class="hidden text-sm font-medium"></div>
 
                 <div class="pt-2">
-                  <ButtonPrimary type="submit" class="mt-8 block mx-auto absolute -bottom-22 left-[calc(50%-117px)] z-10">Quero assinar</ButtonPrimary>
+                  <ButtonPrimary type="submit" class="mt-8 block mx-auto absolute -bottom-22 left-[calc(50%-117px)] z-10">{config.data.form.button}</ButtonPrimary>
                 </div>
               </form>
             </contact-form>
@@ -133,43 +117,41 @@ const selectOptions = [
     <div>
   	  <div class="flex items-center gap-4">
   			<Image
-          src={logo}
+          src={config.data.footer.logo}
           alt="Logo"
-          class="w-auto h-10"
-        />
-        <Image
-          src={logoRight}
-          alt="Logo Right"
-          class="w-auto h-20"
+          class="w-auto h-16"
         />
      </div>
 		</div>
 
 		<div class="text-2xl text-white text-center">
-      <p>(49) <b>3323-6688</b></p>
-      <p>(49) <b>99904-00678</b></p>
+		  { config.data.footer.phones.map(phone => (
+        <p><b>{phone.label}</b></p>
+      ))}
 		</div>
 
 		<div class="text-white">
       <p class="text-secondary mb-2 font-bold">#VemSerInterone</p>
 
-      <p>Avenida Fernando Machado</p>
-      <p>600-D, Centro, Chapecó</p>
-      <p>89802-110</p>
+      {
+          config.data.footer.addresses.map(line => (
+            <p>{line.label}</p>
+          ))
+      }
 		</div>
-
 	</footer>
-
 </Layout>
 
 <script>
-  import { navigate } from "astro:transitions/client";
   import { FORM_APIKEY, FORM_URL } from 'astro:env/client';
+
+  type FormEntry = { name: string };
 
   class ContactForm extends HTMLElement {
     connectedCallback() {
       const form = this.querySelector<HTMLFormElement>("#contact-form");
       const statusEl = this.querySelector<HTMLDivElement>("#form-status");
+      const config = JSON.parse(this.getAttribute("data-config") || "{}");
 
       if (!form || !statusEl) return;
 
@@ -195,12 +177,10 @@ const selectOptions = [
 
           const input = {
             form: "contato",
-            params: {
-              nome: formData.get("nome") as string,
-              telefone: formData.get("telefone") as string,
-              email: formData.get("email") as string,
-              cidade: formData.get("cidade") as string,
-            },
+            params: config.formFields.reduce((acc: Record<string, FormDataEntryValue | null>, field: FormEntry) => {
+              acc[field.name] = formData.get(field.name);
+              return acc;
+            }, {}),
           };
 
           const response = await fetch(FORM_URL, {
@@ -220,7 +200,7 @@ const selectOptions = [
           }
 
           setTimeout(() => {
-            statusEl.textContent = "Mensagem enviada com sucesso!";
+            statusEl.textContent = config.formSuccessMessage || "Mensagem enviada com sucesso!";
             statusEl.className = "text-sm font-medium text-green-500";
           }, 500);
         } catch {

@@ -22,151 +22,153 @@ media_libraries:
           quality: 85
           width: 2048
           height: 2048
-collections:
-  - name: sections
-    label: Seções
-    icon: home
-    folder: src/content/sections
-    fields:
-      - widget: number
-        name: order
-        label: Ordem
-        default: 0
+collections: []
 singletons:
-  - name: colors
-    label: Cores
-    icon: colors
-    file: src/data/colors.json
+  - name: page
+    label: Configurações da Página
+    icon: page_info
+    file: src/data/page.json
     summary: "{{title}}"
     thumbnail: false
     editor:
       preview: false
     fields:
       - widget: hidden
-        name: title
-        label: Título
-        default: Cores
-      - widget: object
-        name: primary
-        label: Primária
-        fields:
-          - widget: color
-            name: default
-            label: Primária (Padrão)
-            required: true
-          - widget: color
-            name: light
-            label: Primária (Light)
-            required: false
-          - widget: color
-            name: dark
-            label: Primária (Dark)
-            required: false
-      - widget: object
-        name: secondary
-        label: Secundária
-        fields:
-          - widget: color
-            name: default
-            label: Secundária (Padrão)
-            required: true
-          - widget: color
-            name: light
-            label: Secundária (Light)
-            required: false
-          - widget: color
-            name: dark
-            label: Secundária (Dark)
-            required: false
-      - widget: object
-        name: highlight
-        label: Realce
-        fields:
-          - widget: color
-            name: default
-            label: Realce (Padrão)
-            required: false
-          - widget: color
-            name: light
-            label: Realce (Light)
-            required: false
-          - widget: color
-            name: dark
-            label: Realce (Dark)
-            required: false
-  - divider: true
-  - name: header
-    label: Header
-    icon: page_header
-    file: src/data/header.json
-    summary: "{{title}}"
-    thumbnail: false
-    editor:
-      preview: false
-    fields:
+        name: slug
+        label: slug
+        default: page-config
       - widget: hidden
         name: title
         label: Título
-        default: Header to
-      - widget: boolean
-        name: show
-        label: Exibir Header
-        default: true
+        default: Configurações da Página
       - widget: object
-        name: logo
-        label: Configurações do Logo
+        name: header
+        label: Header e topo
         fields:
           - widget: image
-            name: image
-            label: Imagem do Logo
-          - widget: select
-            name: position
-            label: Posição do Logo
-            options:
-              - label: Esquerda
-                value: left
-              - label: Centro
-                value: center
-              - label: Direita
-                value: right
-            default: center
+            name: logo
+            label: Logo da Página
+            required: true
+          - widget: image
+            name: marker
+            label: Marcação
+            required: true
+          - widget: image
+            name: banner
+            label: Banner (1440x780)
+            required: true
       - widget: list
-        name: left-menu
-        label: Menu Esquerdo
-        comment: Menu mais a esquerda, fica centralizado se o logo estiver alinhado à
-          esquerda
+        name: chars
+        label: Características
         default: []
         required: false
-        fields: &a1
+        fields:
           - widget: string
             name: label
-            label: Label
+            label: Label da Característica
+      - widget: object
+        name: form
+        label: Configurações do Formulário
+        fields:
           - widget: image
-            name: icon
-            label: Ícone ou imagem (opcional)
-            required: false
-          - widget: boolean
-            name: icon-only
-            label: Exibir apenas o ícone (sem label)
-            default: false
+            name: bannerForm
+            label: Banner do Formulário (190x550)
+            required: true
           - widget: string
-            name: id
-            label: ID do componente
+            name: formTitle
+            label: Título do Formulário
+            required: true
+          - widget: list
+            name: formFields
+            label: Campos do Formulário
+            default: []
             required: false
-            hint: "Exemplo: #contato. Se preenchido, o link irá rolar a página até o
-              componente com esse ID"
-          - widget: string
-            name: url
-            label: URL
-            comment: Apenas para link externo. Se o campo ID for preenchido, esse campo será
-              ignorado
-            hint: "Exemplo: https://exemplo.com"
+            types:
+              - widget: object
+                name: text
+                label: Campo de Texto
+                fields:
+                  - widget: string
+                    name: name
+                    label: Nome do campo
+                  - widget: string
+                    name: label
+                    label: Label do Campo
+                  - widget: boolean
+                    name: required
+                    label: Campo Obrigatório
+                    default: false
+              - widget: object
+                name: select
+                label: Campo de Seleção
+                fields:
+                  - widget: string
+                    name: name
+                    label: Nome do campo
+                  - widget: string
+                    name: label
+                    label: Label do Campo
+                  - widget: list
+                    name: options
+                    label: Opções de Seleção
+                    default: []
+                    required: false
+                    fields:
+                      - widget: string
+                        name: label
+                        label: Label da Opção
+                      - widget: string
+                        name: value
+                        label: Valor da Opção
+                  - widget: boolean
+                    name: required
+                    label: Campo Obrigatório
+                    default: false
+              - widget: object
+                name: textarea
+                label: Campo de Texto Longo
+                fields:
+                  - widget: string
+                    name: name
+                    label: Nome do campo
+                  - widget: string
+                    name: label
+                    label: Label do Campo
+                  - widget: boolean
+                    name: required
+                    label: Campo Obrigatório
+                    default: false
+          - widget: text
+            name: formSuccessMessage
+            label: Mensagem de Sucesso do Formulário
+            required: true
+          - widget: text
+            name: button
+            label: Label do Botão
+            required: true
+      - widget: object
+        name: footer
+        label: Configurações do Footer
+        fields:
+          - widget: image
+            name: logo
+            label: Logo do Footer
+            required: true
+          - widget: list
+            name: phones
+            label: Telefones
+            default: []
             required: false
-      - widget: list
-        name: right-menu
-        label: Menu Direito
-        comment: Menu mais a direita, fica centralizado se o logo estiver alinhado à
-          direita
-        default: []
-        required: false
-        fields: *a1
+            fields:
+              - widget: string
+                name: label
+                label: Label do Telefone
+          - widget: list
+            name: addresses
+            label: Endereços
+            default: []
+            required: false
+            fields:
+              - widget: string
+                name: label
+                label: Label do Endereço
