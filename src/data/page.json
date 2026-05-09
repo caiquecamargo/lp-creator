@@ -1,6 +1,6 @@
 {
-  "title": "Configurações da Página",
   "slug": "page-config",
+  "title": "Configurações da Página",
   "header": {
     "logo": "/assets/images/logo-lp-centro.webp",
     "marker": "/assets/images/logo-lp.webp",
@@ -8,7 +8,7 @@
   },
   "chars": [
     {
-      "label": "Internet que não trava"
+      "label": "Internet que não trava 2"
     },
     {
       "label": "Instalação rápida"
