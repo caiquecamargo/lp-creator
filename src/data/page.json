@@ -4,7 +4,7 @@
   "header": {
     "logo": "/assets/images/logo-lp-centro.webp",
     "marker": "/assets/images/logo-lp.webp",
-    "banner": "/assets/images/banner-lp.webp"
+    "banner": "/assets/images/lp-01.webp"
   },
   "chars": [
     {
@@ -18,7 +18,7 @@
     }
   ],
   "form": {
-    "bannerForm": "/assets/images/banner-vertical.webp",
+    "bannerForm": "/assets/images/lp-02.webp",
     "formTitle": "Aproveite a promoção especial",
     "formFields": [
       {
