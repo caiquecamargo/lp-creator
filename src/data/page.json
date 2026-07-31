@@ -3,8 +3,8 @@
   "title": "Configurações da Página",
   "header": {
     "logo": "/assets/images/logo-lp-centro.webp",
-    "marker": "/assets/images/logo-lp.webp",
-    "banner": "/assets/images/lp-01.webp"
+    "marker": "/assets/images/design-sem-nome-1.webp",
+    "banner": "/assets/images/lp-01-1.webp"
   },
   "chars": [
     {
@@ -18,7 +18,7 @@
     }
   ],
   "form": {
-    "bannerForm": "/assets/images/lp-02.webp",
+    "bannerForm": "/assets/images/lp-02-1.webp",
     "formTitle": "Aproveite a promoção especial",
     "formFields": [
       {
